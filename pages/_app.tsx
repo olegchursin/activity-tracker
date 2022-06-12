@@ -1,8 +1,12 @@
+import { component } from '../components/base/components';
+import { ChakraProvider } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { ChakraProvider } from '@chakra-ui/react';
 
-import { extendTheme } from '@chakra-ui/react';
+const components = {
+  Card: component.card
+};
 
 const colors = {
   brand: {
@@ -12,7 +16,7 @@ const colors = {
   }
 };
 
-const theme = extendTheme({ colors });
+const theme = extendTheme({ colors, components });
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

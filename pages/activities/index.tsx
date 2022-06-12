@@ -1,7 +1,7 @@
-import styles from './Activities.module.css';
-import ActivityCard from './../../components/activitycard';
-import { PrismaClient } from '@prisma/client';
+import ActivityCard from '../../components/activityCard';
 import AddActivity from '../../components/addactivity';
+import styles from './Activities.module.css';
+import { PrismaClient } from '@prisma/client';
 import { useState } from 'react';
 
 const prisma = new PrismaClient();
