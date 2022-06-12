@@ -1,35 +1,23 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
 
-const AddActivity = ({ closeModal }) => {
+const AddMeal = ({ closeModal }) => {
   const [disable, setDisable] = useState(false);
   const formRef = useRef();
 
-  async function addNewActivity() {
+  async function addMeal() {
     setDisable(true);
-    const {
-      addActivityName,
-      addActivityTimestamp,
-      addActivityType,
-      addActivityDuration,
-      addActivityReps,
-      addActivityDistance
-    } = formRef.current as any;
+    const { addMealName, addMealTimestamp, addMealDescription } =
+      formRef.current as any;
 
-    const name = addActivityName.value;
-    const type = addActivityType.value;
-    const duration = parseFloat(addActivityDuration.value);
-    const reps = parseFloat(addActivityReps.value);
-    const distance = parseFloat(addActivityDistance.value);
-    const timestamp = new Date(addActivityTimestamp.value);
+    const name = addMealName.value;
+    const description = addMealDescription.value;
+    const timestamp = new Date(addMealTimestamp.value);
 
-    await axios.post('/api/addActivity', {
+    await axios.post('/api/addMeal', {
       name,
-      type,
-      timestamp,
-      duration,
-      reps,
-      distance
+      description,
+      timestamp
     });
     setDisable(false);
     window.location.reload();
@@ -40,7 +28,7 @@ const AddActivity = ({ closeModal }) => {
       <div className="modal-backdrop" onClick={() => closeModal()}></div>
       <div className="modal-content">
         <div className="modal-header">
-          <h3>Add Activity</h3>
+          <h3>Add Meal</h3>
           <span
             style={{ padding: '10px', cursor: 'pointer' }}
             onClick={() => closeModal()}
@@ -59,7 +47,7 @@ const AddActivity = ({ closeModal }) => {
                   <label>Name</label>
                 </div>
                 <div>
-                  <input name="addActivityName" type="text" />
+                  <input name="addMealName" type="text" />
                 </div>
               </div>
             </div>
@@ -74,9 +62,9 @@ const AddActivity = ({ closeModal }) => {
                 </div>
                 <div>
                   <input
-                    name="addActivityTimestamp"
+                    name="addMealTimestamp"
                     type="datetime-local"
-                    id="activity-timestamp"
+                    id="meal-timestamp"
                     min="2022-06-01T00:00"
                   ></input>
                 </div>
@@ -85,37 +73,10 @@ const AddActivity = ({ closeModal }) => {
 
             <div className="inputField">
               <div className="label">
-                <label>Type</label>
+                <label>Description</label>
               </div>
               <div>
-                <input name="addActivityType" type="text" />
-              </div>
-            </div>
-
-            <div className="inputField">
-              <div className="label">
-                <label>Duration</label>
-              </div>
-              <div>
-                <input name="addActivityDuration" type="number" />
-              </div>
-            </div>
-
-            <div className="inputField">
-              <div className="label">
-                <label>Distance</label>
-              </div>
-              <div>
-                <input name="addActivityDistance" type="number" />
-              </div>
-            </div>
-
-            <div className="inputField">
-              <div className="label">
-                <label>Reps</label>
-              </div>
-              <div>
-                <input name="addActivityReps" type="number" />
+                <textarea name="addMealDescription" data-type="text"></textarea>
               </div>
             </div>
           </form>
@@ -126,11 +87,7 @@ const AddActivity = ({ closeModal }) => {
             Cancel
           </button>
 
-          <button
-            disabled={disable}
-            className="btn"
-            onClick={() => addNewActivity()}
-          >
+          <button disabled={disable} className="btn" onClick={() => addMeal()}>
             Add
           </button>
         </div>
@@ -139,4 +96,4 @@ const AddActivity = ({ closeModal }) => {
   );
 };
 
-export default AddActivity;
+export default AddMeal;

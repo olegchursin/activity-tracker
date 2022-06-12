@@ -12,6 +12,7 @@ interface IActivityCard {
 
 const ActivityCard: React.FunctionComponent<any> = ({ activity }) => {
   console.log('activity', activity);
+  const ts = new Date(activity.timestamp).toLocaleString();
 
   return (
     <Link href={`/activity/${activity.id}`}>
@@ -22,18 +23,28 @@ const ActivityCard: React.FunctionComponent<any> = ({ activity }) => {
           </div>
 
           <div className={styles.activityCardType}>
-            <span>Type</span>
+            <span>Type: </span>
             <span>{activity.type}</span>
           </div>
 
           <div className={styles.activityCardType}>
-            <span>Timestamp</span>
-            <span>{activity.timestamp}</span>
+            <span>Time: </span>
+            <span>{ts}</span>
           </div>
 
           <div className={styles.activityCardType}>
-            <span>Duration</span>
+            <span>Duration: </span>
             <span>{activity.duration}</span>
+          </div>
+
+          <div className={styles.activityCardType}>
+            <span>Reps: </span>
+            <span>{activity.reps}</span>
+          </div>
+
+          <div className={styles.activityCardType}>
+            <span>Distance: </span>
+            <span>{activity.distance}</span>
           </div>
         </div>
       </div>

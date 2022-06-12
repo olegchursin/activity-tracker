@@ -1,35 +1,23 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
 
-const AddActivity = ({ closeModal }) => {
+const AddVital = ({ closeModal }) => {
   const [disable, setDisable] = useState(false);
   const formRef = useRef();
 
-  async function addNewActivity() {
+  async function addNewVital() {
     setDisable(true);
-    const {
-      addActivityName,
-      addActivityTimestamp,
-      addActivityType,
-      addActivityDuration,
-      addActivityReps,
-      addActivityDistance
-    } = formRef.current as any;
+    const { AddVitalName, AddVitalTimestamp, AddVitalValue } =
+      formRef.current as any;
 
-    const name = addActivityName.value;
-    const type = addActivityType.value;
-    const duration = parseFloat(addActivityDuration.value);
-    const reps = parseFloat(addActivityReps.value);
-    const distance = parseFloat(addActivityDistance.value);
-    const timestamp = new Date(addActivityTimestamp.value);
+    const name = AddVitalName.value;
+    const value = parseFloat(AddVitalValue.value);
+    const timestamp = new Date(AddVitalTimestamp.value);
 
-    await axios.post('/api/addActivity', {
+    await axios.post('/api/addVital', {
       name,
-      type,
-      timestamp,
-      duration,
-      reps,
-      distance
+      value,
+      timestamp
     });
     setDisable(false);
     window.location.reload();
@@ -40,7 +28,7 @@ const AddActivity = ({ closeModal }) => {
       <div className="modal-backdrop" onClick={() => closeModal()}></div>
       <div className="modal-content">
         <div className="modal-header">
-          <h3>Add Activity</h3>
+          <h3>Add Vital</h3>
           <span
             style={{ padding: '10px', cursor: 'pointer' }}
             onClick={() => closeModal()}
@@ -59,7 +47,7 @@ const AddActivity = ({ closeModal }) => {
                   <label>Name</label>
                 </div>
                 <div>
-                  <input name="addActivityName" type="text" />
+                  <input name="AddVitalName" type="text" />
                 </div>
               </div>
             </div>
@@ -74,7 +62,7 @@ const AddActivity = ({ closeModal }) => {
                 </div>
                 <div>
                   <input
-                    name="addActivityTimestamp"
+                    name="AddVitalTimestamp"
                     type="datetime-local"
                     id="activity-timestamp"
                     min="2022-06-01T00:00"
@@ -85,37 +73,10 @@ const AddActivity = ({ closeModal }) => {
 
             <div className="inputField">
               <div className="label">
-                <label>Type</label>
+                <label>Value: </label>
               </div>
               <div>
-                <input name="addActivityType" type="text" />
-              </div>
-            </div>
-
-            <div className="inputField">
-              <div className="label">
-                <label>Duration</label>
-              </div>
-              <div>
-                <input name="addActivityDuration" type="number" />
-              </div>
-            </div>
-
-            <div className="inputField">
-              <div className="label">
-                <label>Distance</label>
-              </div>
-              <div>
-                <input name="addActivityDistance" type="number" />
-              </div>
-            </div>
-
-            <div className="inputField">
-              <div className="label">
-                <label>Reps</label>
-              </div>
-              <div>
-                <input name="addActivityReps" type="number" />
+                <input name="AddVitalValue" type="number" />
               </div>
             </div>
           </form>
@@ -129,7 +90,7 @@ const AddActivity = ({ closeModal }) => {
           <button
             disabled={disable}
             className="btn"
-            onClick={() => addNewActivity()}
+            onClick={() => addNewVital()}
           >
             Add
           </button>
@@ -139,4 +100,4 @@ const AddActivity = ({ closeModal }) => {
   );
 };
 
-export default AddActivity;
+export default AddVital;

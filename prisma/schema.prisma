@@ -11,18 +11,25 @@ datasource db {
 }
 
 model Activity {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   type      String
   name      String?
   duration  Int?
   reps      Int?
-  distance  Int?
+  distance  Float?
   timestamp DateTime
 }
 
-model Vitals {
-  id        Int      @id @default(autoincrement())
-  weight    Int
-  height    Int
+model Vital {
+  id        String   @id @default(uuid())
+  name      String
+  value     Float
   timestamp DateTime
+}
+
+model Meal {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  timestamp   DateTime
 }

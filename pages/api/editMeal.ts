@@ -4,15 +4,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async (req, res) => {
-  const { id, type, name, duration, reps, distance, timestamp } = req.body;
+  const { id, name, description, timestamp } = req.body;
   try {
-    const updateActivity = await prisma.activity.update({
+    const updateMeal = await prisma.meal.update({
       where: {
         id
       },
-      data: { id, type, name, duration, reps, distance, timestamp }
+      data: { id, name, description, timestamp }
     });
-    res.status(200).json(updateActivity);
+    res.status(200).json(updateMeal);
   } catch (error) {
     res
       .status(403)

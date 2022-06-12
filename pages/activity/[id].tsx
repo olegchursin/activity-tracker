@@ -66,7 +66,7 @@ const Activity: React.FunctionComponent<any> = props => {
 export async function getServerSideProps(context) {
   const { id } = context.params;
   const activity = await prisma.activity.findUnique({
-    where: { id: parseInt(id) }
+    where: { id }
   });
   const serializedActivity = {
     ...activity,
