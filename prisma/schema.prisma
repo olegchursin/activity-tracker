@@ -11,13 +11,14 @@ datasource db {
 }
 
 model Activity {
-  id        String   @id @default(uuid())
-  type      String
-  name      String?
-  duration  Int?
-  reps      Int?
-  distance  Float?
-  timestamp DateTime
+  id          String   @id @default(uuid())
+  type        String
+  name        String?
+  duration    Int?
+  reps        Int?
+  distance    Float?
+  description String?
+  timestamp   DateTime
 }
 
 model Vital {
