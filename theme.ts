@@ -10,4 +10,12 @@ const components = {
   Card: component.card
 };
 
-export const theme = extendTheme({ config, components });
+const styles = {
+  global: props => ({
+    body: {
+      backgroundColor: props.colorMode === 'dark' ? 'gray.900' : 'gray.50'
+    }
+  })
+};
+
+export const theme = extendTheme({ config, components, styles });

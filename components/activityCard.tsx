@@ -68,7 +68,7 @@ const ActivityCard: React.FunctionComponent<IActivityCardProps> = ({
               variant="outline"
             />
             <MenuList>
-              <NextLink href={`/activity/${id}`} passHref>
+              <NextLink href={`/activity/${id}`}>
                 <Link>
                   <MenuItem icon={<InfoOutlineIcon />}>Details</MenuItem>
                 </Link>

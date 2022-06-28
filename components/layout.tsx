@@ -1,8 +1,8 @@
-import { Box, useColorModeValue } from '@chakra-ui/react';
-import Head from 'next/head';
-import React from 'react';
 import Footer from './footer';
+import Head from 'next/head';
 import Navbar from './navbar';
+import React from 'react';
+import { Box, Grid, GridItem, useColorModeValue } from '@chakra-ui/react';
 
 const Layout = ({ children }) => {
   const bg = useColorModeValue('gray.50', 'blackAlpha.600');
@@ -18,11 +18,18 @@ const Layout = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
-      <Box paddingBlockStart={8} paddingBlockEnd={24} as="main" bg={bg}>
-        {children}
-      </Box>
-      <Footer />
+      <Grid minH="100%" templateRows="1fr auto">
+        <GridItem position="relative">
+          <Box paddingBlockStart={32} paddingBlockEnd={24} as="main" bg={bg}>
+            {children}
+          </Box>
+          <Navbar />
+        </GridItem>
+
+        <GridItem rowStart={2} rowEnd={3}>
+          <Footer />
+        </GridItem>
+      </Grid>
     </>
   );
 };
