@@ -1,4 +1,5 @@
-import MealCard from '../components/mealCard';
+import NewVital from '../components/newVital';
+import VitalsCard from '../components/vitalsCard';
 import {
   Box,
   Container,
@@ -8,24 +9,23 @@ import {
   Heading
 } from '@chakra-ui/react';
 import { PrismaClient } from '@prisma/client';
-import NewMeal from '../components/newMeal';
 
 const prisma = new PrismaClient();
 
-const Meals: React.FunctionComponent<any> = ({ meals }) => {
+const Vitals: React.FunctionComponent<any> = ({ vitals }) => {
   return (
     <Box>
       <Container maxW="1200px">
         <Flex justify="space-between" marginBlockEnd={4}>
-          <Heading as="h2">Meals</Heading>
-          <NewMeal />
+          <Heading as="h2">Vitals</Heading>
+          <NewVital />
         </Flex>
 
         <Grid templateColumns="repeat( auto-fill, minmax(350px, 1fr) )" gap={6}>
-          {meals?.map(meal => {
+          {vitals?.map(vital => {
             return (
-              <GridItem key={meal.id} w="100%">
-                <MealCard meal={meal} key={meal.id} />
+              <GridItem key={vital.id} w="100%">
+                <VitalsCard vital={vital} key={vital.id} />
               </GridItem>
             );
           })}
@@ -36,22 +36,22 @@ const Meals: React.FunctionComponent<any> = ({ meals }) => {
 };
 
 export async function getServerSideProps() {
-  const meals = await prisma.meal.findMany({
+  const vitals = await prisma.vital.findMany({
     orderBy: [
       {
         timestamp: 'desc'
       }
     ]
   });
-  const serializedMeals = meals.map(meal => {
-    return { ...meal, timestamp: meal.timestamp.toString() as any };
+  const serializedVitals = vitals.map(vital => {
+    return { ...vital, timestamp: vital.timestamp.toString() as any };
   });
 
   return {
     props: {
-      meals: serializedMeals
+      vitals: serializedVitals
     }
   };
 }
 
-export default Meals;
+export default Vitals;

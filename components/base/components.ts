@@ -3,23 +3,22 @@ export const component = {
     baseStyle: {
       display: 'flex',
       flexDirection: 'column',
-      background: 'white',
       gap: 6
     },
     variants: {
       rounded: {
-        padding: 8,
+        padding: 6,
         borderRadius: 'xl',
-        boxShadow: 'xl'
+        boxShadow: 'lg'
       },
       smooth: {
-        padding: 6,
+        padding: 4,
         borderRadius: 'base',
         boxShadow: 'md'
       }
     },
     defaultProps: {
-      variant: 'smooth'
+      variant: 'rounded'
     }
   }
 };

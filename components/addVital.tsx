@@ -19,7 +19,6 @@ const AddVital = ({ closeModal }) => {
       value,
       timestamp
     });
-    setDisable(false);
     window.location.reload();
   }
 
