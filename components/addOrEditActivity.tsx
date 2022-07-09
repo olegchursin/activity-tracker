@@ -25,18 +25,19 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 import {
-  CREATE_ACTIVITY_API_PATH,
+  ADD_ACTIVITY_API_PATH,
   EDIT_ACTIVITY_API_PATH
 } from '../utils/routing';
 import { useForm } from 'react-hook-form';
+import { getDatetimeDefaultValue } from '../utils/datetime';
 
 const activityTypes = Object.values(ActivityType);
 
-interface INewActivityProps {
+interface IAddOrEditActivityProps {
   readonly activity?: Activity;
 }
 
-const AddOrEditActivity: React.FC<INewActivityProps> = ({ activity }) => {
+const AddOrEditActivity: React.FC<IAddOrEditActivityProps> = ({ activity }) => {
   const isNewActivity = !activity;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
@@ -67,9 +68,7 @@ const AddOrEditActivity: React.FC<INewActivityProps> = ({ activity }) => {
       params = { ...params, id: activity.id } as any;
     }
 
-    const path = isNewActivity
-      ? CREATE_ACTIVITY_API_PATH
-      : EDIT_ACTIVITY_API_PATH;
+    const path = isNewActivity ? ADD_ACTIVITY_API_PATH : EDIT_ACTIVITY_API_PATH;
 
     await axios.post(path, params);
     window.location.reload();
@@ -157,7 +156,9 @@ const AddOrEditActivity: React.FC<INewActivityProps> = ({ activity }) => {
                     <FormLabel htmlFor="timestamp">Date and time</FormLabel>
                     <Input
                       id="timestamp"
-                      defaultValue={activity?.timestamp.toLocaleString()}
+                      defaultValue={getDatetimeDefaultValue(
+                        activity?.timestamp
+                      )}
                       type="datetime-local"
                       min="2022-06-01T00:00"
                       {...register('timestamp', {

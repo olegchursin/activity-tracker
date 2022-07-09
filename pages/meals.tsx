@@ -8,7 +8,7 @@ import {
   Heading
 } from '@chakra-ui/react';
 import { PrismaClient } from '@prisma/client';
-import NewMeal from '../components/newMeal';
+import NewMeal from '../components/addOrEditMeal';
 
 const prisma = new PrismaClient();
 

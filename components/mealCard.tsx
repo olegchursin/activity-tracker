@@ -1,33 +1,23 @@
+import AddOrEditMeal from './addOrEditMeal';
 import NextLink from 'next/link';
 import {
   Box,
   Flex,
-  Text,
+  IconButton,
   Link,
   Menu,
   MenuButton,
-  MenuList,
   MenuItem,
-  IconButton,
+  MenuList,
+  Text,
   useColorModeValue
 } from '@chakra-ui/react';
 import { Card } from './card';
-import {
-  DeleteIcon,
-  EditIcon,
-  HamburgerIcon,
-  InfoOutlineIcon
-} from '@chakra-ui/icons';
-
-interface IMeal {
-  readonly id: string;
-  readonly name: string;
-  readonly description: string;
-  readonly timestamp: string;
-}
+import { DeleteIcon, HamburgerIcon, InfoOutlineIcon } from '@chakra-ui/icons';
+import { Meal } from '@prisma/client';
 
 interface IMealCardProps {
-  readonly meal: IMeal;
+  readonly meal: Meal;
 }
 
 const MealCard: React.FunctionComponent<IMealCardProps> = ({ meal }) => {
@@ -59,7 +49,7 @@ const MealCard: React.FunctionComponent<IMealCardProps> = ({ meal }) => {
                   <MenuItem icon={<InfoOutlineIcon />}>Details</MenuItem>
                 </Link>
               </NextLink>
-              <MenuItem icon={<EditIcon />}>Edit</MenuItem>
+              <AddOrEditMeal meal={meal} />
               <MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
             </MenuList>
           </Menu>
