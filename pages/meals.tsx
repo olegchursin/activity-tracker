@@ -1,4 +1,6 @@
 import MealCard from '../components/mealCard';
+import NewMeal from '../components/addOrEditMeal';
+import prismaClient from '../utils/prismaClient';
 import {
   Box,
   Container,
@@ -7,10 +9,8 @@ import {
   GridItem,
   Heading
 } from '@chakra-ui/react';
-import { PrismaClient } from '@prisma/client';
-import NewMeal from '../components/addOrEditMeal';
 
-const prisma = new PrismaClient();
+const prisma = prismaClient;
 
 const Meals: React.FunctionComponent<any> = ({ meals }) => {
   return (

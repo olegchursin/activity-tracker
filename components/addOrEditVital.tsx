@@ -1,6 +1,12 @@
 import axios from 'axios';
 import React from 'react';
 import {
+  ADD_VITAL_API_PATH,
+  EDIT_VITAL_API_PATH,
+  VITALS_PATH
+} from '../utils/routing';
+import { AddIcon, EditIcon } from '@chakra-ui/icons';
+import {
   Box,
   Button,
   Drawer,
@@ -15,16 +21,28 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  MenuItem,
   Select,
   Stack,
   useDisclosure
 } from '@chakra-ui/react';
+import { getDatetimeDefaultValue } from '../utils/datetime';
 import { useForm } from 'react-hook-form';
-import { AddIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
+import { Vital } from '@prisma/client';
+import { VitalType } from '../utils/constants';
 
-const NewVital = () => {
+const vitalTypes = Object.values(VitalType);
+
+interface IAddOrEditVitalProps {
+  vital?: Vital;
+}
+
+const AddOrEditVital: React.FC<IAddOrEditVitalProps> = ({ vital }) => {
+  const isNewVital = !vital;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
+  const router = useRouter();
 
   const {
     handleSubmit,
@@ -37,22 +55,40 @@ const NewVital = () => {
     const value = parseFloat(values.value);
     const timestamp = new Date(values.timestamp);
 
-    await axios.post('/api/addVital', {
+    let params = {
       name,
       value,
       timestamp
-    });
-    window.location.reload();
+    };
+    if (!isNewVital) {
+      params = { ...params, id: vital.id } as any;
+    }
+
+    const path = isNewVital ? ADD_VITAL_API_PATH : EDIT_VITAL_API_PATH;
+    await axios.post(path, params);
+    onClose();
+    router.push(VITALS_PATH);
   }
+
+  const newVitalTrigger = (
+    <Button colorScheme="pink" onClick={onOpen}>
+      <Flex gap={2} align="center">
+        <AddIcon />
+        <span>Vital</span>
+      </Flex>
+    </Button>
+  );
+  const existingVitalTrigger = (
+    <MenuItem onClick={onOpen} icon={<EditIcon />}>
+      Edit
+    </MenuItem>
+  );
+  const trigger = isNewVital ? newVitalTrigger : existingVitalTrigger;
+  const actionVerb = isNewVital ? 'Add' : 'Edit';
 
   return (
     <>
-      <Button colorScheme="pink" onClick={onOpen}>
-        <Flex gap={2} align="center">
-          <AddIcon />
-          <span>Vital</span>
-        </Flex>
-      </Button>
+      {trigger}
 
       <Drawer
         isOpen={isOpen}
@@ -64,7 +100,9 @@ const NewVital = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth="1px">Add Vital</DrawerHeader>
+            <DrawerHeader borderBottomWidth="1px">
+              {actionVerb} Vital
+            </DrawerHeader>
 
             <DrawerBody>
               <FormControl isInvalid={errors.name}>
@@ -77,25 +115,30 @@ const NewVital = () => {
                     <FormLabel htmlFor="type">Name</FormLabel>
                     <Select
                       id="name"
-                      defaultValue="weight"
+                      defaultValue={vital?.name}
                       {...register('name', {
                         required: 'Name is required'
                       })}
                     >
-                      <option value="weight">Weight</option>
-                      <option value="sleep">Sleep</option>
-                      <option value="pulse">Pulse</option>
+                      {vitalTypes.map(type => {
+                        return (
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
+                        );
+                      })}
                     </Select>
                   </Box>
 
                   <Box>
-                    <FormLabel htmlFor="timestamp">Date and time</FormLabel>
+                    <FormLabel htmlFor="timestamp">Timestamp</FormLabel>
                     <Input
                       id="timestamp"
+                      defaultValue={getDatetimeDefaultValue(vital?.timestamp)}
                       type="datetime-local"
                       min="2022-06-01T00:00"
                       {...register('timestamp', {
-                        required: 'Date and time are required'
+                        required: 'Timestamp is required'
                       })}
                     />
                   </Box>
@@ -104,6 +147,7 @@ const NewVital = () => {
                     <FormLabel htmlFor="value">Value</FormLabel>
                     <Input
                       id="value"
+                      defaultValue={vital?.value}
                       type="number"
                       step="0.1"
                       min="0"
@@ -119,7 +163,7 @@ const NewVital = () => {
                 Cancel
               </Button>
               <Button colorScheme="pink" isLoading={isSubmitting} type="submit">
-                Add
+                {actionVerb}
               </Button>
             </DrawerFooter>
           </DrawerContent>
@@ -129,4 +173,4 @@ const NewVital = () => {
   );
 };
 
-export default NewVital;
+export default AddOrEditVital;

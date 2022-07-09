@@ -1,6 +1,10 @@
 import axios from 'axios';
 import React from 'react';
-import { ADD_MEAL_API_PATH, EDIT_MEAL_API_PATH } from '../utils/routing';
+import {
+  ADD_MEAL_API_PATH,
+  EDIT_MEAL_API_PATH,
+  MEALS_PATH
+} from '../utils/routing';
 import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -23,10 +27,11 @@ import {
   Textarea,
   useDisclosure
 } from '@chakra-ui/react';
+import { getDatetimeDefaultValue } from '../utils/datetime';
 import { Meal } from '@prisma/client';
 import { MealType } from '../utils/constants';
 import { useForm } from 'react-hook-form';
-import { getDatetimeDefaultValue } from '../utils/datetime';
+import { useRouter } from 'next/router';
 
 const mealTypes = Object.values(MealType);
 
@@ -38,6 +43,7 @@ const AddOrEditMeal: React.FC<IAddOrEditMealProps> = ({ meal }) => {
   const isNewMeal = !meal;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
+  const router = useRouter();
 
   const {
     handleSubmit,
@@ -61,7 +67,8 @@ const AddOrEditMeal: React.FC<IAddOrEditMealProps> = ({ meal }) => {
 
     const path = isNewMeal ? ADD_MEAL_API_PATH : EDIT_MEAL_API_PATH;
     await axios.post(path, params);
-    window.location.reload();
+    onClose();
+    router.push(MEALS_PATH);
   }
 
   const newMealTrigger = (
@@ -134,7 +141,7 @@ const AddOrEditMeal: React.FC<IAddOrEditMealProps> = ({ meal }) => {
                       type="datetime-local"
                       min="2022-06-01T00:00"
                       {...register('timestamp', {
-                        required: 'Date and time are required'
+                        required: 'Timestamp is required'
                       })}
                     />
                   </Box>

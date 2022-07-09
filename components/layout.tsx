@@ -19,8 +19,8 @@ const Layout = ({ children }) => {
       </Head>
 
       <Grid minH="100%" templateRows="1fr auto">
-        <GridItem position="relative">
-          <Box paddingBlockStart={32} paddingBlockEnd={24} as="main" bg={bg}>
+        <GridItem position="relative" bg={bg}>
+          <Box paddingBlockStart={32} paddingBlockEnd={24} as="main">
             {children}
           </Box>
           <Navbar />

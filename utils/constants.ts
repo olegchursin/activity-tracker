@@ -14,6 +14,18 @@ export enum MealType {
   SNACK = 'snack'
 }
 
+export enum VitalType {
+  WEIGHT = 'weight',
+  SLEEP = 'sleep',
+  PULSE = 'pulse'
+}
+
+export enum RecordType {
+  ACTIVITY = 'activity',
+  MEAL = 'meal',
+  VITAL = 'vital'
+}
+
 export enum FormType {
   CREATE,
   EDIT

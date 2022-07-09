@@ -1,11 +1,12 @@
 import axios from 'axios';
 import React from 'react';
-import { Activity } from '@prisma/client';
-import { ActivityType } from '../utils/constants';
 import {
+  ACTIVITIES_PATH,
   ADD_ACTIVITY_API_PATH,
   EDIT_ACTIVITY_API_PATH
 } from '../utils/routing';
+import { Activity } from '@prisma/client';
+import { ActivityType } from '../utils/constants';
 import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -30,6 +31,7 @@ import {
 } from '@chakra-ui/react';
 import { getDatetimeDefaultValue } from '../utils/datetime';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 const activityTypes = Object.values(ActivityType);
 
@@ -41,6 +43,7 @@ const AddOrEditActivity: React.FC<IAddOrEditActivityProps> = ({ activity }) => {
   const isNewActivity = !activity;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
+  const router = useRouter();
 
   const {
     handleSubmit,
@@ -63,15 +66,13 @@ const AddOrEditActivity: React.FC<IAddOrEditActivityProps> = ({ activity }) => {
       reps,
       distance
     };
-
     if (!isNewActivity) {
       params = { ...params, id: activity.id } as any;
     }
-
     const path = isNewActivity ? ADD_ACTIVITY_API_PATH : EDIT_ACTIVITY_API_PATH;
-
     await axios.post(path, params);
-    window.location.reload();
+    onClose();
+    router.push(ACTIVITIES_PATH);
   }
 
   const createActivityTrigger = (
@@ -153,7 +154,7 @@ const AddOrEditActivity: React.FC<IAddOrEditActivityProps> = ({ activity }) => {
                   </Box>
 
                   <Box>
-                    <FormLabel htmlFor="timestamp">Date and time</FormLabel>
+                    <FormLabel htmlFor="timestamp">Timestamp</FormLabel>
                     <Input
                       id="timestamp"
                       defaultValue={getDatetimeDefaultValue(
@@ -162,7 +163,7 @@ const AddOrEditActivity: React.FC<IAddOrEditActivityProps> = ({ activity }) => {
                       type="datetime-local"
                       min="2022-06-01T00:00"
                       {...register('timestamp', {
-                        required: 'Date and time are required'
+                        required: 'Timestamp is required'
                       })}
                     />
                   </Box>

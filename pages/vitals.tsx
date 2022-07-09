@@ -1,4 +1,4 @@
-import NewVital from '../components/newVital';
+import AddOrEditVital from '../components/addOrEditVital';
 import VitalsCard from '../components/vitalsCard';
 import {
   Box,
@@ -8,9 +8,9 @@ import {
   GridItem,
   Heading
 } from '@chakra-ui/react';
-import { PrismaClient } from '@prisma/client';
+import prismaClient from '../utils/prismaClient';
 
-const prisma = new PrismaClient();
+const prisma = prismaClient;
 
 const Vitals: React.FunctionComponent<any> = ({ vitals }) => {
   return (
@@ -18,7 +18,7 @@ const Vitals: React.FunctionComponent<any> = ({ vitals }) => {
       <Container maxW="1200px">
         <Flex justify="space-between" marginBlockEnd={4}>
           <Heading as="h2">Vitals</Heading>
-          <NewVital />
+          <AddOrEditVital />
         </Flex>
 
         <Grid templateColumns="repeat( auto-fill, minmax(350px, 1fr) )" gap={6}>

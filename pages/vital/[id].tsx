@@ -1,20 +1,20 @@
 import prismaClient from '../../utils/prismaClient';
-import { Activity } from '@prisma/client';
 import { Box, Button, Container, Flex, Heading, Text } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { deleteRecord } from '../../utils/api';
 import { RecordType } from '../../utils/constants';
 import { useRouter } from 'next/router';
+import { Vital } from '@prisma/client';
 
 const prisma = prismaClient;
 
-interface IActivityProps {
-  activity: Activity;
+interface IVitalProps {
+  vital: Vital;
 }
 
-const Activity: React.FC<IActivityProps> = ({ activity }) => {
-  const { id, name, type, duration, description, distance } = activity;
-  const timestamp = new Date(activity.timestamp).toLocaleString();
+const Vital: React.FC<IVitalProps> = ({ vital }) => {
+  const { id, name, value } = vital;
+  const timestamp = new Date(vital.timestamp).toLocaleString();
   const router = useRouter();
 
   return (
@@ -22,21 +22,17 @@ const Activity: React.FC<IActivityProps> = ({ activity }) => {
       <Container maxW="1200px">
         <Heading as="h2">{name}</Heading>
 
-        <Text>{type}</Text>
-        <Text>{duration}</Text>
-        <Text>{description}</Text>
-        <Text>{distance}</Text>
         <Text>{timestamp}</Text>
-        <Text>{type}</Text>
+        <Text>{value}</Text>
 
         <Button
           colorScheme="pink"
-          onClick={() => deleteRecord(id, RecordType.ACTIVITY, router)}
+          onClick={() => deleteRecord(id, RecordType.VITAL, router)}
           variant="outline"
         >
           <Flex gap={2} align="center">
             <DeleteIcon />
-            <span>Delete Activity</span>
+            <span>Delete Vital</span>
           </Flex>
         </Button>
       </Container>
@@ -46,18 +42,18 @@ const Activity: React.FC<IActivityProps> = ({ activity }) => {
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
-  const activity = await prisma.activity.findUnique({
+  const vital = await prisma.vital.findUnique({
     where: { id }
   });
-  const serializedActivity = {
-    ...activity,
-    timestamp: activity.timestamp.toString() as any
+  const serializedVital = {
+    ...vital,
+    timestamp: vital.timestamp.toString() as any
   };
   return {
     props: {
-      activity: serializedActivity
+      vital: serializedVital
     }
   };
 }
 
-export default Activity;
+export default Vital;

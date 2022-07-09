@@ -1,7 +1,8 @@
 import ActivityCard from '../components/activityCard';
 import AddOrEditActivity from '../components/addOrEditActivity';
+import prismaClient from '../utils/prismaClient';
 import React from 'react';
-import { Activity, PrismaClient } from '@prisma/client';
+import { Activity } from '@prisma/client';
 import {
   Box,
   Container,
@@ -11,7 +12,7 @@ import {
   Heading
 } from '@chakra-ui/react';
 
-const prisma = new PrismaClient();
+const prisma = prismaClient;
 
 interface IActivitiesProps {
   activities: Activity[];
