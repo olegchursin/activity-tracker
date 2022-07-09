@@ -1,4 +1,3 @@
-import styles from './Activity.module.css';
 import { PrismaClient } from '@prisma/client';
 import { useState } from 'react';
 import EditActivity from '../../components/editactivity';
@@ -14,25 +13,24 @@ const Activity: React.FunctionComponent<any> = props => {
 
   async function deleteActivity() {
     if (window.confirm('Do you want to delete this Activity?')) {
-      // ...
       await axios.post('/api/deleteActivity', { id: parseInt(activity?.id) });
       router.push('/activities');
     }
   }
 
   return (
-    <div className={styles.activityContainer}>
-      <div className={styles.activity}>
-        <div className={styles.activityDetails}>
-          <div className={styles.activityName}>
+    <div>
+      <div>
+        <div>
+          <div>
             <h1>{activity?.name}</h1>
           </div>
 
-          <div className={styles.activityName}>
+          <div>
             <p>{activity?.type}</p>
           </div>
 
-          <div className={styles.activityName}>
+          <div>
             <p>{activity?.duration}</p>
           </div>
 

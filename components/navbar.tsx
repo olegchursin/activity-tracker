@@ -1,12 +1,35 @@
 import NextLink from 'next/link';
+import ThemeToggle from './themeToggle';
+import { ACTIVITIES_PATH, MEALS_PATH, VITALS_PATH } from '../utils/routing';
 import { Box } from '@chakra-ui/layout';
 import { Container, Flex, Image, Link, Text } from '@chakra-ui/react';
-import { IconButton } from '@chakra-ui/button';
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode';
+import { useColorModeValue } from '@chakra-ui/color-mode';
+
+interface ILink {
+  readonly id: string;
+  readonly label: string;
+  readonly href: string;
+}
+
+const links: ReadonlyArray<ILink> = [
+  {
+    id: 'activities',
+    label: 'Activities',
+    href: ACTIVITIES_PATH
+  },
+  {
+    id: 'meals',
+    label: 'Meals',
+    href: MEALS_PATH
+  },
+  {
+    id: 'vitals',
+    label: 'Vitals',
+    href: VITALS_PATH
+  }
+];
 
 const Navbar = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('white', 'black');
 
   return (
@@ -38,18 +61,16 @@ const Navbar = () => {
           </NextLink>
 
           <Flex align="center" gap="4">
-            <NextLink href="/activities" passHref>
-              <Link>Activities</Link>
-            </NextLink>
-            <NextLink href="/meals" passHref>
-              <Link>Meals</Link>
-            </NextLink>
-            <NextLink href="/vitals" passHref>
-              <Link>Vitals</Link>
-            </NextLink>
-            <IconButton aria-label="Toggle Mode" onClick={toggleColorMode}>
-              {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-            </IconButton>
+            {links.map(link => {
+              const { id, label, href } = link;
+              return (
+                <NextLink key={id} href={href} passHref>
+                  <Link>{label}</Link>
+                </NextLink>
+              );
+            })}
+
+            <ThemeToggle />
           </Flex>
         </Flex>
       </Container>
