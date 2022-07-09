@@ -16,6 +16,6 @@ export default async (req, res) => {
   } catch (error) {
     res
       .status(403)
-      .json({ err: 'Error occurred while updating a vital item.' });
+      .json({ message: 'Error occurred while updating vital.', error });
   }
 };

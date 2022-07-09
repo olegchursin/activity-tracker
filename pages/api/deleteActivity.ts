@@ -15,6 +15,6 @@ export default async (req, res) => {
   } catch (error) {
     res
       .status(403)
-      .json({ err: 'Error occured while deleting a activity item.' });
+      .json({ message: 'Error occured while deleting activity item.', error });
   }
 };

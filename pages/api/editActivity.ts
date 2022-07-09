@@ -14,8 +14,9 @@ export default async (req, res) => {
     });
     res.status(200).json(updateActivity);
   } catch (error) {
-    res
-      .status(403)
-      .json({ err: 'Error occurred while updating a activity item.' });
+    res.status(403).json({
+      message: 'Error occurred while updating a activity item.',
+      error
+    });
   }
 };

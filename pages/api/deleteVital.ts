@@ -13,6 +13,8 @@ export default async (req, res) => {
     });
     res.status(200).json(deleteVital);
   } catch (error) {
-    res.status(403).json({ err: 'Error occured while deleting a vital item.' });
+    res
+      .status(403)
+      .json({ message: 'Error occured while deleting vital.', error });
   }
 };

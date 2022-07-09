@@ -13,6 +13,8 @@ export default async (req, res) => {
     });
     res.status(200).json(deleteMeal);
   } catch (error) {
-    res.status(403).json({ err: 'Error occured while deleting a meal item.' });
+    res
+      .status(403)
+      .json({ message: 'Error occured while deleting meal item.', error });
   }
 };
