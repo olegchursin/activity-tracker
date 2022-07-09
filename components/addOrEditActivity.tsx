@@ -1,5 +1,8 @@
 import axios from 'axios';
 import React from 'react';
+import { Activity } from '@prisma/client';
+import { ActivityType } from '../utils/constants';
+import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -15,15 +18,26 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  MenuItem,
   Select,
   Stack,
   Textarea,
   useDisclosure
 } from '@chakra-ui/react';
+import {
+  CREATE_ACTIVITY_API_PATH,
+  EDIT_ACTIVITY_API_PATH
+} from '../utils/routing';
 import { useForm } from 'react-hook-form';
-import { AddIcon } from '@chakra-ui/icons';
 
-const NewActivity = () => {
+const activityTypes = Object.values(ActivityType);
+
+interface INewActivityProps {
+  readonly activity?: Activity;
+}
+
+const AddOrEditActivity: React.FC<INewActivityProps> = ({ activity }) => {
+  const isNewActivity = !activity;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
 
@@ -40,25 +54,48 @@ const NewActivity = () => {
     const distance = parseFloat(values.distance);
     const timestamp = new Date(values.timestamp);
 
-    await axios.post('/api/addActivity', {
+    let params = {
       name,
       type,
       timestamp,
       duration,
       reps,
       distance
-    });
+    };
+
+    if (!isNewActivity) {
+      params = { ...params, id: activity.id } as any;
+    }
+
+    const path = isNewActivity
+      ? CREATE_ACTIVITY_API_PATH
+      : EDIT_ACTIVITY_API_PATH;
+
+    await axios.post(path, params);
     window.location.reload();
   }
 
+  const createActivityTrigger = (
+    <Button colorScheme="pink" onClick={onOpen}>
+      <Flex gap={2} align="center">
+        <AddIcon />
+        <span>Activity</span>
+      </Flex>
+    </Button>
+  );
+
+  const editActivityTrigger = (
+    <MenuItem onClick={onOpen} icon={<EditIcon />}>
+      Edit
+    </MenuItem>
+  );
+
+  const trigger = isNewActivity ? createActivityTrigger : editActivityTrigger;
+  const actionVerb = isNewActivity ? 'Add' : 'Edit';
+
   return (
     <>
-      <Button colorScheme="pink" onClick={onOpen}>
-        <Flex gap={2} align="center">
-          <AddIcon />
-          <span>Activity</span>
-        </Flex>
-      </Button>
+      {trigger}
 
       <Drawer
         isOpen={isOpen}
@@ -70,7 +107,9 @@ const NewActivity = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth="1px">Add Activity</DrawerHeader>
+            <DrawerHeader borderBottomWidth="1px">
+              {actionVerb} Activity
+            </DrawerHeader>
 
             <DrawerBody>
               <FormControl isInvalid={errors.name}>
@@ -83,6 +122,7 @@ const NewActivity = () => {
                     <FormLabel htmlFor="name">Name</FormLabel>
                     <Input
                       id="name"
+                      defaultValue={activity?.name}
                       placeholder="Name"
                       {...register('name', {
                         required: 'Name is required',
@@ -98,15 +138,18 @@ const NewActivity = () => {
                     <FormLabel htmlFor="type">Type</FormLabel>
                     <Select
                       id="type"
-                      defaultValue="biking"
+                      defaultValue={activity?.type ?? ActivityType.BIKING}
                       {...register('type', {
                         required: 'Type is required'
                       })}
                     >
-                      <option value="biking">Biking</option>
-                      <option value="pushups">Pushups</option>
-                      <option value="pullups">Pullups</option>
-                      <option value="swimming">Swimming</option>
+                      {activityTypes.map(type => {
+                        return (
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
+                        );
+                      })}
                     </Select>
                   </Box>
 
@@ -114,6 +157,7 @@ const NewActivity = () => {
                     <FormLabel htmlFor="timestamp">Date and time</FormLabel>
                     <Input
                       id="timestamp"
+                      defaultValue={activity?.timestamp.toLocaleString()}
                       type="datetime-local"
                       min="2022-06-01T00:00"
                       {...register('timestamp', {
@@ -126,6 +170,7 @@ const NewActivity = () => {
                     <FormLabel htmlFor="duration">Duration</FormLabel>
                     <Input
                       id="duration"
+                      defaultValue={activity?.duration}
                       type="number"
                       step="0.1"
                       min="0"
@@ -139,6 +184,7 @@ const NewActivity = () => {
                     <FormLabel htmlFor="distance">Distance</FormLabel>
                     <Input
                       id="distance"
+                      defaultValue={activity?.distance}
                       type="number"
                       step="0.1"
                       min="0"
@@ -148,12 +194,21 @@ const NewActivity = () => {
 
                   <Box>
                     <FormLabel htmlFor="reps">Reps</FormLabel>
-                    <Input id="reps" type="number" {...register('reps')} />
+                    <Input
+                      id="reps"
+                      defaultValue={activity?.reps}
+                      type="number"
+                      {...register('reps')}
+                    />
                   </Box>
 
                   <Box>
                     <FormLabel htmlFor="description">Description</FormLabel>
-                    <Textarea id="description" {...register('description')} />
+                    <Textarea
+                      id="description"
+                      defaultValue={activity?.description}
+                      {...register('description')}
+                    />
                   </Box>
                 </Stack>
               </FormControl>
@@ -164,7 +219,7 @@ const NewActivity = () => {
                 Cancel
               </Button>
               <Button colorScheme="pink" isLoading={isSubmitting} type="submit">
-                Add
+                {actionVerb}
               </Button>
             </DrawerFooter>
           </DrawerContent>
@@ -174,4 +229,4 @@ const NewActivity = () => {
   );
 };
 
-export default NewActivity;
+export default AddOrEditActivity;

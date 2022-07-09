@@ -1,5 +1,7 @@
 import ActivityCard from '../components/activityCard';
+import AddOrEditActivity from '../components/addOrEditActivity';
 import React from 'react';
+import { Activity, PrismaClient } from '@prisma/client';
 import {
   Box,
   Container,
@@ -8,18 +10,22 @@ import {
   GridItem,
   Heading
 } from '@chakra-ui/react';
-import { PrismaClient } from '@prisma/client';
-import NewActivity from '../components/newActivity';
 
 const prisma = new PrismaClient();
 
-const Activities: React.FunctionComponent<any> = ({ activities }) => {
+interface IActivitiesProps {
+  activities: Activity[];
+}
+
+const Activities: React.FunctionComponent<IActivitiesProps> = ({
+  activities
+}) => {
   return (
     <Box>
       <Container maxW="1200px">
         <Flex justify="space-between" marginBlockEnd={4}>
           <Heading as="h2">Activities</Heading>
-          <NewActivity />
+          <AddOrEditActivity />
         </Flex>
 
         <Grid templateColumns="repeat( auto-fill, minmax(350px, 1fr) )" gap={6}>

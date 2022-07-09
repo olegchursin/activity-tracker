@@ -1,7 +1,14 @@
 import NextLink from 'next/link';
+import { Activity } from '@prisma/client';
 import {
   Box,
   Flex,
+  IconButton,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Stat,
   StatHelpText,
   StatLabel,
@@ -9,40 +16,20 @@ import {
   Tag,
   TagLabel,
   Text,
-  Link,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
   useColorModeValue
 } from '@chakra-ui/react';
 import { Card } from './card';
-import {
-  DeleteIcon,
-  EditIcon,
-  HamburgerIcon,
-  InfoOutlineIcon
-} from '@chakra-ui/icons';
-
-interface IActivity {
-  readonly distance?: number;
-  readonly duration?: string;
-  readonly id: string;
-  readonly name?: string;
-  readonly reps?: number;
-  readonly timestamp: string;
-  readonly type: string;
-}
+import { DeleteIcon, HamburgerIcon, InfoOutlineIcon } from '@chakra-ui/icons';
+import AddOrEditActivity from './addOrEditActivity';
 
 interface IActivityCardProps {
-  readonly activity: IActivity;
+  readonly activity: Activity;
 }
 
 const ActivityCard: React.FunctionComponent<IActivityCardProps> = ({
   activity
 }) => {
-  const bg = useColorModeValue('white', 'gray.800');
+  const bg = useColorModeValue('white', 'gray.900');
   const { duration, id, name, type, distance, reps } = activity;
   const timestamp = new Date(activity.timestamp).toLocaleString();
 
@@ -73,7 +60,7 @@ const ActivityCard: React.FunctionComponent<IActivityCardProps> = ({
                   <MenuItem icon={<InfoOutlineIcon />}>Details</MenuItem>
                 </Link>
               </NextLink>
-              <MenuItem icon={<EditIcon />}>Edit</MenuItem>
+              <AddOrEditActivity activity={activity} />
               <MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
             </MenuList>
           </Menu>

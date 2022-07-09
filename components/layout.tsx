@@ -5,7 +5,7 @@ import React from 'react';
 import { Box, Grid, GridItem, useColorModeValue } from '@chakra-ui/react';
 
 const Layout = ({ children }) => {
-  const bg = useColorModeValue('gray.50', 'blackAlpha.600');
+  const bg = useColorModeValue('gray.50', 'blackAlpha.700');
 
   return (
     <>
