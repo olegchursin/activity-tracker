@@ -2,6 +2,10 @@ import axios from 'axios';
 import React from 'react';
 import { Activity } from '@prisma/client';
 import { ActivityType } from '../utils/constants';
+import {
+  ADD_ACTIVITY_API_PATH,
+  EDIT_ACTIVITY_API_PATH
+} from '../utils/routing';
 import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -24,12 +28,8 @@ import {
   Textarea,
   useDisclosure
 } from '@chakra-ui/react';
-import {
-  ADD_ACTIVITY_API_PATH,
-  EDIT_ACTIVITY_API_PATH
-} from '../utils/routing';
-import { useForm } from 'react-hook-form';
 import { getDatetimeDefaultValue } from '../utils/datetime';
+import { useForm } from 'react-hook-form';
 
 const activityTypes = Object.values(ActivityType);
 
